@@ -47,13 +47,13 @@ class App extends Component {
               id="login"
               onClick={() => this.setState({ renderLoginForm: true })}
             >Login</button>
-            <p>{message}</p>
+            <p id="message">{message}</p>
           </>
         );
         break;
       case authenticated:
         renderLogin = (
-          <p>Hi {JSON.parse(sessionStorage.getItem("credentials")).uid}</p>
+          <p id="message">Hi {JSON.parse(sessionStorage.getItem("credentials")).uid}</p>
         );
         break;
     }
