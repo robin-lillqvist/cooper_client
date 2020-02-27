@@ -43,9 +43,7 @@ describe("User attempts save data", () => {
       cy.get("input#age").type("23");
       cy.get("#save-result").click();
       cy.get("#response-message").should("contain", "Your entry was saved")
-      cy.get("input#distance")
-        .clear()
-        .type("1500");
+      cy.get("input#distance").clear().type("1500");
       cy.get("#save-result").click();
       cy.get("#response-message").should("contain", "Your entry was saved")
     });
