@@ -25,10 +25,9 @@ class DisplayPerformanceData extends Component {
 
     render () {
         let dataIndex;
-        
         if(this.state.performanceData != null){
             dataIndex = (
-                <div>
+                <div id="index">
                     {this.state.performanceData.map(run => {
                         return <div key={run.id}>{run.data.message}</div>
                     })}
