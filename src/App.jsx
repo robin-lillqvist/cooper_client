@@ -19,6 +19,7 @@ class App extends Component {
     registered: false,
     authenticated: false,
     message: "",
+    errorMessage: "",
     entrySaved: false,
     renderIndex: false
   };
@@ -36,7 +37,7 @@ class App extends Component {
     if (response.authenticated) {
       this.setState({ authenticated: true });
     } else {
-      this.setState({ message: response.message, renderLoginForm: false });
+      this.setState({ message: "Something went wrong! :()"});
     }
   };
 
@@ -48,23 +49,28 @@ class App extends Component {
       e.target.password_confirmation.value
     );
     if (response.registered) {
-       this.setState({ registered: true });
+      this.setState({ registered: true });
+      this.setState({ message: "Your user was created! :D"});
+      console.log(response)
     } else {
-      this.setState({ message: response.message, renderRegisterForm: false });
+      // this.setState({ message: response.message });
+      this.setState({ message: "Something went wrong! :("});
+      console.log(response)
     }
   };
 
   render() {
-    const { renderLoginForm, renderRegisterForm, authenticated, message } = this.state;
+    const { renderLoginForm, renderRegisterForm, authenticated, message, registered } = this.state;
     let renderBackButton;
     let renderLogin;
     let renderRegister;
+    let renderErrorMessage;
     let performanceDataIndex;
 
     switch(true) {
       case renderLoginForm && !authenticated:
         renderLogin = <LoginForm submitFormHandler={this.onLogin} />;
-        break;  
+        break;
       case renderRegisterForm && !authenticated:
         renderLogin = <RegisterForm submitFormHandler={this.onRegister} />;
         break; 
@@ -79,13 +85,11 @@ class App extends Component {
               id="register"
               onClick={() => this.setState({ renderRegisterForm: true })}
             >Register</button>
-            <p id="message">{message}</p>
           </>
         );
         break;
       case authenticated:
-        renderLogin = (<p id="message">Hi {JSON.parse(sessionStorage.getItem("credentials")).uid}</p>);
-        
+        renderLogin = (<p id="message">Hi {JSON.parse(sessionStorage.getItem("credentials")).uid} ;D</p>);
         if (this.state.renderIndex) {
           performanceDataIndex = (
             <>
@@ -103,13 +107,21 @@ class App extends Component {
         }
         break;
     }
-    
+
     if(renderLoginForm || renderRegisterForm){
       renderBackButton = (
         <>
-          <button id="backButton" onClick={() => this.setState({ renderRegisterForm: false, renderLoginForm: false })}>Back</button>
+          <button id="backButton" onClick={() => this.setState({ renderRegisterForm: false, renderLoginForm: false, message: "" })}>Back</button>
         </>
       );}
+
+    if(registered || message){
+      renderErrorMessage = (
+        <>
+          <p id="message">{message}</p>
+        </>
+      )
+    }
 
     return (
       <>
@@ -117,6 +129,7 @@ class App extends Component {
         {renderBackButton}
         {renderLogin}
         {renderRegister}
+        {renderErrorMessage}
         <DisplayCooperResult
         distance={this.state.distance}
         gender={this.state.gender}
