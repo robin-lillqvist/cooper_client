@@ -27,16 +27,16 @@ class DisplayPerformanceData extends Component {
         let dataIndex;
         if(this.state.performanceData != null){
             dataIndex = (
-                <div id="index">
+                <>
                     {this.state.performanceData.map(run => {
-                        return <div key={run.id}>{run.data.message}</div>
+                        return <div class="item"><div class="content" key={run.id}>{run.data.message}</div></div>
                     })}
-                </div>
+                </>
             )
         }
         return (
-            <div>
-            {dataIndex}
+            <div class="ui celled list">
+                {dataIndex}
             </div>
         )
     }

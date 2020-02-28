@@ -19,7 +19,6 @@ class App extends Component {
     registered: false,
     authenticated: false,
     message: "",
-    errorMessage: "",
     entrySaved: false,
     renderIndex: false
   };
@@ -62,56 +61,58 @@ class App extends Component {
   render() {
     const { renderLoginForm, renderRegisterForm, authenticated, message, registered } = this.state;
     let renderBackButton;
-    let renderLogin;
-    let renderRegister;
+    let renderLoginMessage;
+    let renderButtons;
+    let renderLogout;
+    let renderInputForms;
     let renderErrorMessage;
     let performanceDataIndex;
 
     switch(true) {
       case renderLoginForm && !authenticated:
-        renderLogin = <LoginForm submitFormHandler={this.onLogin} />;
+        renderInputForms = <LoginForm submitFormHandler={this.onLogin} />;
         break;
       case renderRegisterForm && !authenticated:
-        renderLogin = <RegisterForm submitFormHandler={this.onRegister} />;
+        renderInputForms = <RegisterForm submitFormHandler={this.onRegister} />;
         break; 
       case !renderLoginForm && !authenticated:
-        renderLogin = (
+        renderButtons = (
           <>
             <button
-              id="login"
-              onClick={() => this.setState({ renderLoginForm: true })}
-            >Login</button>
-            <button
-              id="register"
-              onClick={() => this.setState({ renderRegisterForm: true })}
-            >Register</button>
+              className="ui primary button" id="login" onClick={() => this.setState({ renderLoginForm: true })}>Login</button>
+            <button className="ui primary button" id="register" onClick={() => this.setState({ renderRegisterForm: true })}>Register</button>
           </>
         );
         break;
       case authenticated:
-        renderLogin = (<p id="message">Hi {JSON.parse(sessionStorage.getItem("credentials")).uid} ;D</p>);
+        renderLoginMessage = (<p id="message">Logged in as: {JSON.parse(sessionStorage.getItem("credentials")).uid}</p>);
+        renderLogout = (<div className=" column">
+                          <a className="ui primary button" id="logoutButton" 
+                          onClick={() => this.setState({ authenticated: false, renderBackButton: false })}>Logout</a>
+                        </div>);
         if (this.state.renderIndex) {
           performanceDataIndex = (
             <>
+              <button className="ui primary button" onClick={() => this.setState({ renderIndex: false })}>Hide past entries</button>
+              <div className="break"></div>
               <DisplayPerformanceData
                 updateIndex={this.state.updateIndex}
                 indexUpdated={() => this.setState({ updateIndex: false })}
               />
-              <button onClick={() => this.setState({ renderIndex: false })}>Hide past entries</button>
             </>
           )
         } else {
           performanceDataIndex = (
-            <button id="show-index" onClick={() => this.setState({ renderIndex: true })}>Show past entries</button>
+            <button className="ui primary button"  id="show-index" onClick={() => this.setState({ renderIndex: true })}>Show past entries</button>
           )
         }
         break;
     }
 
-    if(renderLoginForm || renderRegisterForm){
+    if((renderLoginForm || renderRegisterForm) && !authenticated){
       renderBackButton = (
         <>
-          <button id="backButton" onClick={() => this.setState({ renderRegisterForm: false, renderLoginForm: false, message: "" })}>Back</button>
+          <a className="ui primary button" id="backButton" onClick={() => this.setState({ renderRegisterForm: false, renderLoginForm: false, message: "" })}>Back</a>
         </>
       );}
 
@@ -123,29 +124,43 @@ class App extends Component {
       )
     }
 
+    if(authenticated){
+      renderInputForms = (
+        <>
+            <InputFields onChangeHandler={this.onChangeHandler} />
+        </>
+      )
+    }
+
     return (
       <>
-      <div id="ui container">
-        <div id="ui container">
-          <div id="top">
-            <InputFields onChangeHandler={this.onChangeHandler} />
-            {renderBackButton}
-            {renderLogin}
-            {renderRegister}
+        <div class="cover">
+  
+          <nav className="ui fluid two item menu">
+          {renderLoginMessage}
+          {renderButtons}
+          {renderLogout}
+          {renderBackButton}
+          </nav>
+          <div className="container">
+            {renderErrorMessage}
           </div>
-        
-        {renderErrorMessage}
-        <DisplayCooperResult
-        distance={this.state.distance}
-        gender={this.state.gender}
-        age={this.state.age}
-        authenticated={this.state.authenticated}
-        entrySaved={this.state.entrySaved}
-        entryHandler={() => this.setState({ entrySaved: true, updateIndex: true })}
-      />
-        {performanceDataIndex}
-      </div>
-      </div>
+          <div className="container">
+            {renderInputForms}
+          </div>
+          <div className="container">
+          <DisplayCooperResult
+            distance={this.state.distance}
+            gender={this.state.gender}
+            age={this.state.age}
+            authenticated={this.state.authenticated}
+            entrySaved={this.state.entrySaved}
+            entryHandler={() => this.setState({ entrySaved: true, updateIndex: true })}/>
+            </div>
+            <div className="container">
+            {performanceDataIndex}
+            </div>
+          </div>
       </>
     );
   }

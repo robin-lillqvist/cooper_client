@@ -19,19 +19,27 @@ const DisplayCooperResult = ({
     <>
       {propsPassed && (
         <>
-          <p id="cooper-message">
-            {age} y/o {gender} running {distance} meters.
-          </p>
-          <p id="cooper-result">Result: {result}</p>
+      <div className="ui one column centered grid">
+        <div className="ui four column centered row">
+          <div className="centered column"><div id="cooper-message">{age} y/o {gender} running {distance} meters.</div></div>
+        </div>
+        <div className="ui four column centered row">
+          <div className="centered column"><div id="cooper-result">Result: {result}</div></div>
+        </div>
+      </div>
+
           {authenticated && !entrySaved ? (
-            <button
-              id="save-result"
-              onClick={() => saveData(result, entryHandler)}
-            >
-              Save entry
-            </button>
-          ) : (
-            <p id="response-message">Your entry was saved</p>
+            <div className="ui one column centered grid">
+            <div className="ui four column centered row">
+              <div className="centered column"><button id="save-result" onClick={() => saveData(result, entryHandler)}>Save entry</button></div>
+            </div>
+          </div>
+            ) : (
+            <div className="ui one column centered grid">
+              <div className="ui four column centered row">
+                <div className="centered column"><p id="response-message">Your entry was saved</p></div>
+              </div>
+            </div>
           )}
         </>
       )}
