@@ -3,8 +3,10 @@ import React from "react";
 const InputFields = ({ onChangeHandler }) => {
   return (
     <>
-      <label>Distance</label>
-      <input onChange={onChangeHandler} name="distance" id="distance"></input>
+      <div className="ui grid">
+        <label>Distance</label>
+        <input onChange={onChangeHandler} name="distance" id="distance"></input>
+      </div>
 
       <select onChange={onChangeHandler} name="gender" id="gender">
         <option value="female">Female</option>

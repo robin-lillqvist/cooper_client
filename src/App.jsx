@@ -125,10 +125,15 @@ class App extends Component {
 
     return (
       <>
-      <InputFields onChangeHandler={this.onChangeHandler} />
-        {renderBackButton}
-        {renderLogin}
-        {renderRegister}
+      <div id="ui container">
+        <div id="ui container">
+          <div id="top">
+            <InputFields onChangeHandler={this.onChangeHandler} />
+            {renderBackButton}
+            {renderLogin}
+            {renderRegister}
+          </div>
+        
         {renderErrorMessage}
         <DisplayCooperResult
         distance={this.state.distance}
@@ -139,6 +144,8 @@ class App extends Component {
         entryHandler={() => this.setState({ entrySaved: true, updateIndex: true })}
       />
         {performanceDataIndex}
+      </div>
+      </div>
       </>
     );
   }

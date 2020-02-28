@@ -45,3 +45,9 @@
 form * {
   flex-basis: 100%;
 }
+
+#cooper-message, #cooper-result, #message {
+  font-size: 2rem;
+}
+
+#container {}
