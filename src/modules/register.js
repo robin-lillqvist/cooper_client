@@ -9,7 +9,7 @@ const register = async (email, password, password_confirmation) => {
     });
     return { registered: true };
   } catch (error) {
-  return { registered: false /*, message: error.response.data.errors[0] */ };
+  return { registered: false /*, message: response */ };
   }
 };
 
