@@ -85,7 +85,7 @@ class App extends Component {
         );
         break;
       case authenticated:
-        renderLoginMessage = (<p id="message">Logged in as: {JSON.parse(sessionStorage.getItem("credentials")).uid}</p>);
+        renderLoginMessage = (<p id="loginMessage">Logged in as: {JSON.parse(sessionStorage.getItem("credentials")).uid}</p>);
         renderLogout = (<div className=" column">
                           <a className="ui primary button" id="logoutButton" 
                           onClick={() => this.setState({ authenticated: false, renderBackButton: false })}>Logout</a>

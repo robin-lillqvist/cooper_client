@@ -13,12 +13,12 @@ body {
   height: 100%;
 } */
 
-#message {
+#loginMessage {
   margin-top: 0px;
   font-size: 1.5rem;
 }
 
-#cooper-message, #cooper-result, #response-message {
+#cooper-message, #cooper-result, #response-message, #message {
   color: beige;
   text-shadow: 2px 2px 4px #000000;
   font-size: 1.5em;
