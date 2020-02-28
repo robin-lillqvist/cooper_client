@@ -18,7 +18,7 @@ const RegisterForm = ({ submitFormHandler }) => {
         </div>
         <div className="ui four column centered row">
           <div className="centered column">
-          <button id="submit">Submit</button>
+          <button className="ui primary button" id="submit">Submit</button>
           </div>
         </div>
       </div>
