@@ -18,6 +18,7 @@ class App extends Component {
     renderRegisterForm: false,
     registered: false,
     authenticated: false,
+    messageColor: "ui green message", 
     message: "",
     entrySaved: false,
     renderIndex: false
@@ -34,9 +35,9 @@ class App extends Component {
       e.target.password.value
     );
     if (response.authenticated) {
-      this.setState({ authenticated: true });
+      this.setState({ messageColor: "ui green message", authenticated: true });
     } else {
-      this.setState({ message: response.message, renderLoginForm: false });
+      this.setState({ messageColor: "ui red message", message: "Something went wrong! :("});
     }
   };
 
@@ -48,84 +49,118 @@ class App extends Component {
       e.target.password_confirmation.value
     );
     if (response.registered) {
-       this.setState({ registered: true });
+      this.setState({ registered: true });
+      this.setState({ messageColor: "ui green message", message: "Your user was created! :D"});
+      console.log(response)
     } else {
-      this.setState({ message: response.message, renderRegisterForm: false });
+      // this.setState({ message: response.message });
+      this.setState({ messageColor: "ui red message", message: "Something went wrong! :("});
+      console.log(response)
     }
   };
 
   render() {
-    const { renderLoginForm, renderRegisterForm, authenticated, message } = this.state;
+    const { renderLoginForm, renderRegisterForm, authenticated, message, registered, messageColor } = this.state;
     let renderBackButton;
-    let renderLogin;
-    let renderRegister;
+    let renderButtons;
+    let renderLogout;
+    let renderInputForms;
+    let renderMessage;
     let performanceDataIndex;
 
     switch(true) {
       case renderLoginForm && !authenticated:
-        renderLogin = <LoginForm submitFormHandler={this.onLogin} />;
-        break;  
+        renderInputForms = <LoginForm submitFormHandler={this.onLogin} />;
+        break;
       case renderRegisterForm && !authenticated:
-        renderLogin = <RegisterForm submitFormHandler={this.onRegister} />;
+        renderInputForms = <RegisterForm submitFormHandler={this.onRegister} />;
         break; 
       case !renderLoginForm && !authenticated:
-        renderLogin = (
+        renderButtons = (
           <>
             <button
-              id="login"
-              onClick={() => this.setState({ renderLoginForm: true })}
-            >Login</button>
-            <button
-              id="register"
-              onClick={() => this.setState({ renderRegisterForm: true })}
-            >Register</button>
-            <p id="message">{message}</p>
+              className="ui primary button" id="login" onClick={() => this.setState({ renderLoginForm: true })}>Login</button>
+            <button className="ui primary button" id="register" onClick={() => this.setState({ renderRegisterForm: true })}>Register</button>
           </>
         );
         break;
       case authenticated:
-        renderLogin = (<p id="message">Hi {JSON.parse(sessionStorage.getItem("credentials")).uid}</p>);
-        
+        renderMessage = (<div class={messageColor}><p id="loginMessage">Logged in as: {JSON.parse(sessionStorage.getItem("credentials")).uid}</p></div>);
+        renderLogout = (<div className=" column">
+                          <a className="ui primary button" id="logoutButton" 
+                          onClick={() => this.setState({ authenticated: false, registered: false, renderLoginForm: false,
+                            renderRegisterForm: false,renderBackButton: false, message: "", renderButtons: true })}>Logout</a>
+                        </div>);
         if (this.state.renderIndex) {
           performanceDataIndex = (
             <>
+              <button className="ui primary button" onClick={() => this.setState({ renderIndex: false })}>Hide past entries</button>
+              <div className="break"></div>
               <DisplayPerformanceData
                 updateIndex={this.state.updateIndex}
                 indexUpdated={() => this.setState({ updateIndex: false })}
               />
-              <button onClick={() => this.setState({ renderIndex: false })}>Hide past entries</button>
             </>
           )
         } else {
           performanceDataIndex = (
-            <button id="show-index" onClick={() => this.setState({ renderIndex: true })}>Show past entries</button>
+            <button className="ui primary button"  id="show-index" onClick={() => this.setState({ renderIndex: true })}>Show past entries</button>
           )
         }
         break;
     }
-    
-    if(renderLoginForm || renderRegisterForm){
+
+    if((renderLoginForm || renderRegisterForm) && !authenticated){
       renderBackButton = (
         <>
-          <button id="backButton" onClick={() => this.setState({ renderRegisterForm: false, renderLoginForm: false })}>Back</button>
+          <a className="ui primary button" id="backButton" onClick={() => this.setState({ renderRegisterForm: false, renderLoginForm: false, registered: false, message: "" })}>Back</a>
         </>
       );}
 
+    if(registered || message){
+      renderMessage = (
+        <>
+          <div className={messageColor}><p id="message">{message}</p></div>
+        </>
+      )
+    }
+
+    if(authenticated){
+      renderInputForms = (
+        <>
+            <InputFields onChangeHandler={this.onChangeHandler} />
+        </>
+      )
+    }
+
     return (
       <>
-      <InputFields onChangeHandler={this.onChangeHandler} />
-        {renderBackButton}
-        {renderLogin}
-        {renderRegister}
-        <DisplayCooperResult
-        distance={this.state.distance}
-        gender={this.state.gender}
-        age={this.state.age}
-        authenticated={this.state.authenticated}
-        entrySaved={this.state.entrySaved}
-        entryHandler={() => this.setState({ entrySaved: true, updateIndex: true })}
-      />
-        {performanceDataIndex}
+        <div class="cover">
+  
+          <nav className="ui fluid two item menu">
+          {renderButtons}
+          {renderLogout}
+          {renderBackButton}
+          </nav>
+          <div className="container">
+            {renderMessage}
+          </div>
+          <div className="container">
+            {renderInputForms}
+          </div>
+          <div className="container">
+          <DisplayCooperResult
+            distance={this.state.distance}
+            gender={this.state.gender}
+            age={this.state.age}
+            authenticated={this.state.authenticated}
+            entrySaved={this.state.entrySaved}
+            entryHandler={() => this.setState({ entrySaved: true, updateIndex: true })}/>
+            </div>
+            <div className="container" id="index">
+            {performanceDataIndex}
+            </div>
+          </div>
       </>
     );
   }
