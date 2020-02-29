@@ -31,7 +31,7 @@ const DisplayCooperResult = ({
           {authenticated && !entrySaved ? (
             <div className="ui one column centered grid">
             <div className="ui four column centered row">
-              <div className="centered column"><button id="save-result" onClick={() => saveData(result, entryHandler)}>Save entry</button></div>
+              <div className="centered column"><button className="ui primary button" id="save-result" onClick={() => saveData(result, entryHandler)}>Save entry</button></div>
             </div>
           </div>
             ) : (
