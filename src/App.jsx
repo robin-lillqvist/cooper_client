@@ -157,7 +157,7 @@ class App extends Component {
             entrySaved={this.state.entrySaved}
             entryHandler={() => this.setState({ entrySaved: true, updateIndex: true })}/>
             </div>
-            <div className="container">
+            <div className="container" id="index">
             {performanceDataIndex}
             </div>
           </div>

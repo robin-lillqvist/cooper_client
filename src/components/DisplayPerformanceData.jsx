@@ -35,7 +35,7 @@ class DisplayPerformanceData extends Component {
             )
         }
         return (
-            <div class="ui celled list">
+            <div class="ui celled list" >
                 {dataIndex}
             </div>
         )
