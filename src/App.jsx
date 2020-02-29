@@ -120,7 +120,7 @@ class App extends Component {
     if(registered || message){
       renderMessage = (
         <>
-          <div class={messageColor}><p id="message">{message}</p></div>
+          <div className={messageColor}><p id="message">{message}</p></div>
         </>
       )
     }
