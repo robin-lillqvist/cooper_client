@@ -18,6 +18,7 @@ class App extends Component {
     renderRegisterForm: false,
     registered: false,
     authenticated: false,
+    messageColor: "ui green message", 
     message: "",
     entrySaved: false,
     renderIndex: false
@@ -34,9 +35,9 @@ class App extends Component {
       e.target.password.value
     );
     if (response.authenticated) {
-      this.setState({ authenticated: true });
+      this.setState({ messageColor: "ui green message", authenticated: true });
     } else {
-      this.setState({ message: "Something went wrong! :()"});
+      this.setState({ messageColor: "ui red message", message: "Something went wrong! :("});
     }
   };
 
@@ -49,23 +50,22 @@ class App extends Component {
     );
     if (response.registered) {
       this.setState({ registered: true });
-      this.setState({ message: "Your user was created! :D"});
+      this.setState({ messageColor: "ui green message", message: "Your user was created! :D"});
       console.log(response)
     } else {
       // this.setState({ message: response.message });
-      this.setState({ message: "Something went wrong! :("});
+      this.setState({ messageColor: "ui red message", message: "Something went wrong! :("});
       console.log(response)
     }
   };
 
   render() {
-    const { renderLoginForm, renderRegisterForm, authenticated, message, registered } = this.state;
+    const { renderLoginForm, renderRegisterForm, authenticated, message, registered, messageColor } = this.state;
     let renderBackButton;
-    let renderLoginMessage;
     let renderButtons;
     let renderLogout;
     let renderInputForms;
-    let renderErrorMessage;
+    let renderMessage;
     let performanceDataIndex;
 
     switch(true) {
@@ -85,10 +85,11 @@ class App extends Component {
         );
         break;
       case authenticated:
-        renderLoginMessage = (<p id="loginMessage">Logged in as: {JSON.parse(sessionStorage.getItem("credentials")).uid}</p>);
+        renderMessage = (<div class={messageColor}><p id="loginMessage">Logged in as: {JSON.parse(sessionStorage.getItem("credentials")).uid}</p></div>);
         renderLogout = (<div className=" column">
                           <a className="ui primary button" id="logoutButton" 
-                          onClick={() => this.setState({ authenticated: false, renderBackButton: false })}>Logout</a>
+                          onClick={() => this.setState({ authenticated: false, registered: false, renderLoginForm: false,
+                            renderRegisterForm: false,renderBackButton: false, message: "", renderButtons: true })}>Logout</a>
                         </div>);
         if (this.state.renderIndex) {
           performanceDataIndex = (
@@ -112,14 +113,14 @@ class App extends Component {
     if((renderLoginForm || renderRegisterForm) && !authenticated){
       renderBackButton = (
         <>
-          <a className="ui primary button" id="backButton" onClick={() => this.setState({ renderRegisterForm: false, renderLoginForm: false, message: "" })}>Back</a>
+          <a className="ui primary button" id="backButton" onClick={() => this.setState({ renderRegisterForm: false, renderLoginForm: false, registered: false, message: "" })}>Back</a>
         </>
       );}
 
     if(registered || message){
-      renderErrorMessage = (
+      renderMessage = (
         <>
-          <p id="message">{message}</p>
+          <div class={messageColor}><p id="message">{message}</p></div>
         </>
       )
     }
@@ -137,13 +138,12 @@ class App extends Component {
         <div class="cover">
   
           <nav className="ui fluid two item menu">
-          {renderLoginMessage}
           {renderButtons}
           {renderLogout}
           {renderBackButton}
           </nav>
           <div className="container">
-            {renderErrorMessage}
+            {renderMessage}
           </div>
           <div className="container">
             {renderInputForms}
