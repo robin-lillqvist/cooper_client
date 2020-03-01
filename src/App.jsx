@@ -12,7 +12,7 @@ import './App.css';
 class App extends Component {
   state = {
     distance: "",
-    gender: "female",
+    gender: "male",
     age: "",
     renderLoginForm: false,
     renderRegisterForm: false,
