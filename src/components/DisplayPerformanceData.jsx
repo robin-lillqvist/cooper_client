@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { getData } from "../modules/performanceData";
-import {Line, Bubble} from 'react-chartjs-2'
+import {Line} from 'react-chartjs-2'
 
 class DisplayPerformanceData extends Component {
     state = { 
         performanceData: null 
-    }
+    };
 
     componentDidMount() {
         this.getPerformanceData()
@@ -46,8 +46,6 @@ class DisplayPerformanceData extends Component {
           } )
         }        
 
-
-
         let dataForDiagram = {
             datasets: [{
                 data: distances,
@@ -60,10 +58,16 @@ class DisplayPerformanceData extends Component {
 
         }
 
+        var ctx = document.getElementById('myChart')
+        var gradientStroke = ctx.createLinearGradient(500, 0, 100, 0);
+        gradientStroke.addColorStop(0, "#80b6f4");
+        gradientStroke.addColorStop(1, "#f49080");
+
         return (
             <div className=" ui container" >
                 <div className = "column">  {dataIndex}</div>
-                <div className = "column" ><Line data = {dataForDiagram}/></div>
+                <div className = "column" ><Line data = {dataForDiagram} 
+                options={{ maintainAspectRatio: false }}/></div>
                
             </div>
         )
