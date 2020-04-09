@@ -1,14 +1,14 @@
 [![Netlify Status](https://api.netlify.com/api/v1/badges/592adda5-3ff8-4109-bab3-835a751a94bf/deploy-status)](https://app.netlify.com/sites/eager-ardinghelli-5798c5/deploys)
 
-### README
+# README
 This frontend application let the user save his/her Cooper challenge results. It connects to the backend found here: https://github.com/robin-lillqvist/cooper_api
 To save your results register on the page and 
 
-* System dependencies
+### System dependencies
 - Axios
 - Chart.js
 
-* Test frameworks
+### Test frameworks
 - Cypress
 - Enzyme
 
